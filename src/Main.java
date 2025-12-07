@@ -36,12 +36,16 @@ public class Main {
                 int count = 0;
                 int googleBotCount = 0;
                 int yandexBotCount = 0;
+                Statistics statistic = new Statistics();
 
                 while ((line = reader.readLine()) != null) {
                     int length = line.length();
                     count++;
                     if (length > 1024)
                         throw new LongLineException("Обнаружена строка длиной " + length + " Максимально допустимая длина - 1024 символа.");
+
+                    LogEntry entry = new LogEntry(line);
+                    statistic.addEntry(entry);
 
                     String[] userAgent = line.split("\"");
                     String[] userAgentParts = userAgent[userAgent.length - 1].split(";");
@@ -56,9 +60,11 @@ public class Main {
                     }
                 }
 
+                System.out.printf("Объём часового трафика = %.2f\n",statistic.getTrafficRate());
+
                 System.out.printf("Доля запросов от Googlebot: %.2f%%\n",(double)googleBotCount/count*100);
                 System.out.printf("Доля запросов от YandexBot: %.2f%%\n",(double)yandexBotCount/count*100);
-                System.out.println("Общее количество строк в файле: " + count);
+                System.out.println("Общее количество строк в файле: " + count+"\n");
             } catch (LongLineException ex) {
                 ex.printStackTrace();
                 return;
