@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -33,21 +34,31 @@ public class Main {
                 String line;
 
                 int count = 0;
-                int maxL = 0;
-                int minL = Integer.MAX_VALUE;
+                int googleBotCount = 0;
+                int yandexBotCount = 0;
 
                 while ((line = reader.readLine()) != null) {
                     int length = line.length();
                     count++;
-                    maxL = Math.max(maxL, length);
-                    minL = Math.min(minL, length);
                     if (length > 1024)
                         throw new LongLineException("Обнаружена строка длиной " + length + " Максимально допустимая длина - 1024 символа.");
+
+                    String[] userAgent = line.split("\"");
+                    String[] userAgentParts = userAgent[userAgent.length - 1].split(";");
+
+                    if (userAgentParts.length >= 2) {
+                        String fragment = userAgentParts[1].replaceAll(" ", "");
+                        String[] firstFragment = fragment.split("/");
+                        if (Objects.equals(firstFragment[0], "Googlebot"))
+                            googleBotCount++;
+                        if (Objects.equals(firstFragment[0], "YandexBot"))
+                            yandexBotCount++;
+                    }
                 }
 
+                System.out.printf("Доля запросов от Googlebot: %.2f%%\n",(double)googleBotCount/count*100);
+                System.out.printf("Доля запросов от YandexBot: %.2f%%\n",(double)yandexBotCount/count*100);
                 System.out.println("Общее количество строк в файле: " + count);
-                System.out.println("Максимальная длина строки в файле: " + maxL);
-                System.out.println("Минимальная длина строки в файле: " + minL + "\n");
             } catch (LongLineException ex) {
                 ex.printStackTrace();
                 return;
