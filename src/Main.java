@@ -41,7 +41,7 @@ public class Main {
                     count++;
                     maxL = Math.max(maxL, length);
                     minL = Math.min(minL, length);
-                    if (maxL > 1024)
+                    if (length > 1024)
                         throw new LongLineException("Обнаружена строка длиной " + length + " Максимально допустимая длина - 1024 символа.");
                 }
 
