@@ -56,6 +56,10 @@ public class Statistics {
         return new ArrayList<>(existingPages);
     }
 
+    public List<String> getUnExistingPages() {
+        return new ArrayList<>(unExistingPages);
+    }
+
     public HashMap<String, Double> getOsStatistics() {
         HashMap<String, Double> osStatistics = new HashMap<>();
 
