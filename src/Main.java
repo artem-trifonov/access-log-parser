@@ -13,7 +13,7 @@ public class Main {
         */
         int countCorretPath = 0;
         do {
-            System.out.println("Введите корректный путь к файлу");
+            System.out.println("\nВведите корректный путь к файлу");
             String path = new Scanner(System.in).nextLine();
             File file = new File(path);
             boolean fileExists = file.exists();
@@ -78,7 +78,12 @@ public class Main {
 
                 System.out.printf("\nСреднее количество посещения за час: %.4f%n", statistic.getAverageVisitsPerHour());
                 System.out.printf("Среднее количество ошибочных посещения за час: %.4f%n", statistic.getAverageFailedVisitsPerHour());
-                System.out.printf("Средняя посещаемость одним пользователем %.4f%n\n", statistic.getAverageVisitsOneUser());
+                System.out.printf("Средняя посещаемость одним пользователем: %.4f%n\n", statistic.getAverageVisitsOneUser());
+
+                System.out.print("Пиковая посещаемость сайта в одну секунду: " + statistic.getPeakVisitsPerSecond()+"\n");
+                System.out.print("Список сайтов с которых есть ссылка: " + statistic.getRefererSites()+"\n");
+                System.out.print("Максимальная посещаемость одним пользователем: " + statistic.getMaxVisitsOneUser()+"\n");
+
 
             } catch (LongLineException ex) {
                 ex.printStackTrace();
