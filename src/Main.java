@@ -65,6 +65,12 @@ public class Main {
                 System.out.printf("Доля запросов от Googlebot: %.2f%%\n",(double)googleBotCount/count*100);
                 System.out.printf("Доля запросов от YandexBot: %.2f%%\n",(double)yandexBotCount/count*100);
                 System.out.println("Общее количество строк в файле: " + count+"\n");
+
+               System.out.println("Детальная статистика ОС (доли):");
+                for (var entry : statistic.getOsStatistics().entrySet()) {
+                    System.out.printf("%s: %.4f%n", entry.getKey(), entry.getValue());
+                }
+
             } catch (LongLineException ex) {
                 ex.printStackTrace();
                 return;
