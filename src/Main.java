@@ -66,15 +66,19 @@ public class Main {
                 System.out.printf("Доля запросов от YandexBot: %.2f%%\n",(double)yandexBotCount/count*100);
                 System.out.println("Общее количество строк в файле: " + count+"\n");
 
-               System.out.println("Детальная статистика ОС (доли):\n");
+               System.out.println("Детальная статистика ОС (доли):");
                 for (var entry : statistic.getOsStatistics().entrySet()) {
                     System.out.printf("%s: %.4f%n", entry.getKey(), entry.getValue());
                 }
 
-                System.out.println("Детальная статистика Браузеров (доли):\n");
+                System.out.println("\nДетальная статистика Браузеров (доли):");
                 for (var entry : statistic.getBrowserStatistics().entrySet()) {
                     System.out.printf("%s: %.4f%n", entry.getKey(), entry.getValue());
                 }
+
+                System.out.printf("\nСреднее количество посещения за час: %.4f%n", statistic.getAverageVisitsPerHour());
+                System.out.printf("Среднее количество ошибочных посещения за час: %.4f%n", statistic.getAverageFailedVisitsPerHour());
+                System.out.printf("Средняя посещаемость одним пользователем %.4f%n\n", statistic.getAverageVisitsOneUser());
 
             } catch (LongLineException ex) {
                 ex.printStackTrace();

@@ -11,8 +11,11 @@ public class Statistics {
     LocalDateTime maxTime;
     HashSet<String> existingPages;
     HashSet<String> unExistingPages;
+    HashSet<String> uniqueUser;
     HashMap<String, Integer> osFrequency;
     HashMap<String, Integer> browserFrequency;
+    int nonBotRequests;
+    int errorRequests;
 
     public Statistics() {
         this.totalTraffic = 0;
@@ -22,12 +25,24 @@ public class Statistics {
         this.unExistingPages = new HashSet<>();
         this.osFrequency = new HashMap<>();
         this.browserFrequency = new HashMap<>();
+        this.uniqueUser = new HashSet<>();
+        this.nonBotRequests = 0;
+        this.errorRequests = 0;
     }
 
     public void addEntry(LogEntry entry) {
         totalTraffic += entry.getResponseSize();
-
         LocalDateTime entryTime = entry.getTime();
+        boolean isBot = entry.getUserAgent().getIsBot();
+
+        if (!isBot) {
+            nonBotRequests++;
+            uniqueUser.add(entry.getIpAddr());
+        }
+
+        if (entry.getResponseCode() >= 400 && entry.getResponseCode() < 600) {
+            errorRequests++;
+        }
 
         if (this.minTime == null || entryTime.isBefore(this.minTime)) {
             this.minTime = entryTime;
@@ -90,5 +105,30 @@ public class Statistics {
         }
 
         return browserStatistics;
+    }
+
+    public double getAverageVisitsPerHour() {
+        Duration duration = Duration.between(minTime, maxTime);
+        double hours = duration.toHours();
+        if (hours < 1.0) {
+            hours = 1.0;
+        }
+        return (double) nonBotRequests / hours;
+    }
+
+    public double getAverageFailedVisitsPerHour() {
+        Duration duration = Duration.between(minTime, maxTime);
+        double hours = duration.toHours();
+        if (hours < 1.0) {
+            hours = 1.0;
+        }
+        if (errorRequests == 0) {
+            return 0.0;
+        }
+        return (double) errorRequests / hours;
+    }
+
+    public double getAverageVisitsOneUser() {
+        return (double) nonBotRequests / uniqueUser.size();
     }
 }
