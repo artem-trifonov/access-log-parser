@@ -66,8 +66,13 @@ public class Main {
                 System.out.printf("Доля запросов от YandexBot: %.2f%%\n",(double)yandexBotCount/count*100);
                 System.out.println("Общее количество строк в файле: " + count+"\n");
 
-               System.out.println("Детальная статистика ОС (доли):");
+               System.out.println("Детальная статистика ОС (доли):\n");
                 for (var entry : statistic.getOsStatistics().entrySet()) {
+                    System.out.printf("%s: %.4f%n", entry.getKey(), entry.getValue());
+                }
+
+                System.out.println("Детальная статистика Браузеров (доли):\n");
+                for (var entry : statistic.getBrowserStatistics().entrySet()) {
                     System.out.printf("%s: %.4f%n", entry.getKey(), entry.getValue());
                 }
 
